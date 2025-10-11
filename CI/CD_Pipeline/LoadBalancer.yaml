@@ -8,6 +8,6 @@ spec:
     app: cd-listener
   ports:
     - protocol: TCP
-      port: 8080
-      targetPort: 8080
-  type: LoadBalancer
+      port: 8080        # Exposing port 8080 to the outside world
+      targetPort: 8080  # Forward traffic to port 8080 inside the container
+  type: LoadBalancer    # This is crucial for provisioning the external IP
