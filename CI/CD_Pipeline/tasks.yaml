@@ -12,12 +12,13 @@ spec:
       image: alpine:3
       command: [/bin/echo]
       args: ["$(params.message)"]
-
 ---
+
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: cleanup
+  namespace: default
 spec:
   description: This task will clean up a workspace by deleting all of the files.
   workspaces:
@@ -32,6 +33,7 @@ spec:
       securityContext:
         runAsNonRoot: false
         runAsUser: 0
+      workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
         set -eu
@@ -49,11 +51,14 @@ spec:
           rm -rf "${WORKSPACE_SOURCE_PATH}"/..?*
         fi
 
+        
+
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: nose
+  namespace: default
 spec:
   params:
     - name: args

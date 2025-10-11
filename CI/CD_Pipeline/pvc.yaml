@@ -2,11 +2,11 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pipelinerun-pvc
+  namespace: default
 spec:
-  storageClassName: skills-network-learner
-  resources:
-    requests:
-      storage:  1Gi
-  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: do-block-storage   # or whatever class works in your cluster

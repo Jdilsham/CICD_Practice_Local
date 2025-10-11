@@ -2,10 +2,12 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:  
   name: cd-pipeline
+  namespace: default
 spec:
   workspaces:
     - name: pipeline-workspace
   params:
+    - name: app-name
     - name: build-image
     - name: repo-url
     - name: branch
@@ -64,7 +66,6 @@ spec:
           workspace: pipeline-workspace          
       taskRef:
         name: buildah
-        kind: ClusterTask
       params:
       - name: IMAGE
         value: "$(params.build-image)"

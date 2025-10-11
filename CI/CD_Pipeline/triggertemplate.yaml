@@ -1,14 +1,35 @@
 apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
-  name: <place-name-here>
+  name: cd-template
 spec:
   params:
-  # Add parameters here
+    - name: repository
+      description: The git repository URL
+      default: " "
+    - name: branch
+      description: The git branch to build
+      default: "main"
   resourcetemplates:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: cd-pipeline-run-
+        name: cd-pipeline-run
+        namespace: default
       spec:
-      # Add pipeline definition here
+        serviceAccountName: pipeline-sa
+        pipelineRef:
+          name: cd-pipeline
+        workspaces:
+          - name: pipeline-workspace       # must match the workspace name in pipeline.yaml
+            persistentVolumeClaim:
+              claimName: pipelinerun-pvc   # must match PVC name
+        params:
+          - name: repo-url
+            value: "https://github.com/Jdilsham/CICD_Practice_Local.git"
+          - name: branch
+            value: "main"
+          - name: build-image
+            value: "docker.io/janithad/cicd-practice-local:latest"
+          - name: app-name
+            value: "my-python-service"

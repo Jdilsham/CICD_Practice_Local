@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: cd-pipeline-run
+  namespace: default
+spec:
+  serviceAccountName: pipeline-sa
+  pipelineRef:
+    name: cd-pipeline
+  workspaces:
+    - name: pipeline-workspace       # must match the workspace name in pipeline.yaml
+      persistentVolumeClaim:
+        claimName: pipelinerun-pvc   # must match PVC name
+  params:
+    - name: repo-url
+      value: "https://github.com/Jdilsham/CICD_Practice_Local.git"
+    - name: branch
+      value: "main"
+    - name: build-image
+      value: "docker.io/janithad/cicd-practice-local:latest"
+    - name: app-name
+      value: "my-python-service"

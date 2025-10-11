@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-setup
+spec:
+  restartPolicy: Never
+  volumes:
+    - name: workdir
+      persistentVolumeClaim:
+        claimName: pipelinerun-pvc
+  containers:
+    - name: fix
+      image: alpine:3
+      command:
+        - sh
+        - -c
+        - |
+          echo "✅ Setting permissions for Tekton workspace..."
+          chmod -R 777 /workspace
+          ls -ld /workspace
+      volumeMounts:
+        - name: workdir
+          mountPath: /workspace
+      securityContext:
+        runAsUser: 0
