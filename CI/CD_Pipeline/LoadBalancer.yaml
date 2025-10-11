@@ -5,9 +5,14 @@ metadata:
   namespace: default
 spec:
   selector:
-    app: cd-listener
+    app: cd-listener  # Ensure this matches your EventListener pod labels
   ports:
-    - protocol: TCP
-      port: 8080        # Exposing port 8080 to the outside world
-      targetPort: 8080  # Forward traffic to port 8080 inside the container
-  type: LoadBalancer    # This is crucial for provisioning the external IP
+    - name: http-port    # Added port name
+      protocol: TCP
+      port: 8080         # Expose the service on port 8080
+      targetPort: 8080   # Forward traffic to port 8080 on the pod
+    - name: metrics-port # Added port name
+      protocol: TCP
+      port: 9000         # Expose the service on port 9000 (for example, for metrics)
+      targetPort: 9000   # Forward traffic to port 9000 on the pod
+  type: LoadBalancer  # This ensures an external IP is provisioned by DigitalOcean

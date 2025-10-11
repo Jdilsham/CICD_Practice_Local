@@ -14,21 +14,21 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        name: cd-pipeline-run
+        name: "$(uid)-$(params.repository)-$(params.branch)"  # Dynamic naming based on parameters
         namespace: default
       spec:
         serviceAccountName: pipeline-sa
         pipelineRef:
-          name: cd-pipeline
+          name: cd-pipeline  # Ensure this matches the name of your pipeline
         workspaces:
-          - name: pipeline-workspace       # must match the workspace name in pipeline.yaml
+          - name: pipeline-workspace   # Match workspace name in pipeline.yaml
             persistentVolumeClaim:
-              claimName: pipelinerun-pvc   # must match PVC name
+              claimName: pipelinerun-pvc  # Ensure the PVC name matches
         params:
           - name: repo-url
-            value: "https://github.com/Jdilsham/CICD_Practice_Local.git"
+            value: "$(params.repository)"  # Use the dynamic repository URL
           - name: branch
-            value: "main"
+            value: "$(params.branch)"  # Use the dynamic branch from the webhook payload
           - name: build-image
             value: "docker.io/janithad/cicd-practice-local:latest"
           - name: app-name
