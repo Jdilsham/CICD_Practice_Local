@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: cd-pipeline-run
+  name: cd-pipeline-runn
   namespace: default
 spec:
   serviceAccountName: pipeline-sa
